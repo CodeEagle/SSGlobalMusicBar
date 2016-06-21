@@ -23,9 +23,7 @@ private final class MusicBarManager {
 
 	private(set) weak var target: SSMusicBarShowableProtocol?
 
-	deinit {
-		unregisterMonitor()
-	}
+	deinit { unregisterMonitor() }
 
 	init(object: SSMusicBarShowableProtocol) {
 		target = object
@@ -33,9 +31,7 @@ private final class MusicBarManager {
 	}
 
 	var canShowMusicBar = false {
-		didSet {
-			canShowMusicBar ? setup() : unregisterMonitor()
-		}
+		didSet { canShowMusicBar ? setup() : unregisterMonitor() }
 	}
 
 	private(set) lazy var musicBar: SSMusicBar = SSMusicBar()
@@ -69,11 +65,9 @@ private final class MusicBarManager {
 
 		var ss_playing = false
 
-		Notifier.addObserverForName(requester.playerCurrentTimeChangeKey, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self](_) -> Void in
-			guard let sself = self else { return }
-			sself.showMusicBar()
+		if (requester.playerPlayingState == .Playing || requester.playerPlayingState == .Buffering) && requester.playerPlayingId != nil {
+			showMusicBar()
 		}
-		if requester.playerPlayingId != nil { showMusicBar() }
 
 		defaultMusicBarInfo()
 		Notifier.addObserverForName(requester.playerIndexDidChangeKey, object: nil, queue: nil) { [weak self](_) -> Void in
@@ -94,6 +88,7 @@ private final class MusicBarManager {
 		Notifier.addObserverForName(requester.playerProgressChangeKey, object: nil, queue: nil) { [weak self](note) -> Void in
 			guard let sself = self else { return }
 			if UIApplication.sharedApplication().applicationState == .Background { return }
+			sself.showMusicBar()
 			if let value = note.object as? Float {
 				let val = value.isNaN ? 0 : value
 				sself.updateMusicBar(progress: val)
@@ -257,7 +252,6 @@ public protocol SSMusicDetailViewProtocol {
 //MARK:- SSMusicBarShowableProtocol
 public protocol SSMusicBarShowableProtocol: class {
 
-	var playerCurrentTimeChangeKey: String { get }
 	var playerIndexDidChangeKey: String { get }
 	var playerProgressChangeKey: String { get }
 	var playerPlayingStateChangeKey: String { get }
