@@ -108,7 +108,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16D0E9071D05226D0042B71D /* Build configuration list for PBXNativeTarget "SSGlobalMusicBar" */;
 			buildPhases = (
-				16D0E9171D0523C00042B71D /* Carthage */,
 				16D0E8FD1D05226D0042B71D /* Sources */,
 				16D0E8FE1D05226D0042B71D /* Frameworks */,
 				16D0E8FF1D05226D0042B71D /* Headers */,
@@ -165,24 +164,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		16D0E9171D0523C00042B71D /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/MarqueeLabelSwift.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		16D0E8FD1D05226D0042B71D /* Sources */ = {
