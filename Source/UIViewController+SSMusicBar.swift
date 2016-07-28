@@ -75,6 +75,11 @@ private final class MusicBarManager {
 			self?.defaultMusicBarInfo()
 		}
 
+		Notifier.addObserverForName(requester.playerPlayingInfoUpateKey, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self](_) in
+			if UIApplication.sharedApplication().applicationState == .Background { return }
+			self?.defaultMusicBarInfo()
+		}
+
 		Notifier.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self](_) in
 			self?.defaultMusicBarInfo()
 			// 修复被中断之后回来的状态不对的问题
@@ -255,6 +260,7 @@ public protocol SSMusicBarShowableProtocol: class {
 	var playerIndexDidChangeKey: String { get }
 	var playerProgressChangeKey: String { get }
 	var playerPlayingStateChangeKey: String { get }
+	var playerPlayingInfoUpateKey: String { get }
 	var playerPlayingState: PlayerStatus { get }
 	var playerPlayingId: String? { get }
 	var playerPlayingIndex: Int { get }
