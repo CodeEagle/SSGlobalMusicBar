@@ -7,16 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16675AD61D54904700F31FE9 /* MarqueeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16675AD51D54904700F31FE9 /* MarqueeLayer.swift */; };
+		16675AF91D5494E600F31FE9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16675AF81D5494E600F31FE9 /* AppDelegate.swift */; };
+		16675AFB1D5494E600F31FE9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16675AFA1D5494E600F31FE9 /* ViewController.swift */; };
+		16675AFE1D5494E600F31FE9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16675AFC1D5494E600F31FE9 /* Main.storyboard */; };
+		16675B001D5494E600F31FE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16675AFF1D5494E600F31FE9 /* Assets.xcassets */; };
+		16675B031D5494E600F31FE9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16675B011D5494E600F31FE9 /* LaunchScreen.storyboard */; };
+		16675B081D5494F400F31FE9 /* SSGlobalMusicBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D0E9021D05226D0042B71D /* SSGlobalMusicBar.framework */; };
 		16D0E9051D05226D0042B71D /* SSGlobalMusicBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 16D0E9041D05226D0042B71D /* SSGlobalMusicBar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		16D0E9311D0525B50042B71D /* SSAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0E92C1D0525B50042B71D /* SSAnimationDelegate.swift */; };
 		16D0E9321D0525B50042B71D /* SSDragAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0E92D1D0525B50042B71D /* SSDragAnimator.swift */; };
 		16D0E9331D0525B50042B71D /* SSDragInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0E92E1D0525B50042B71D /* SSDragInteractiveTransition.swift */; };
 		16D0E9341D0525B50042B71D /* SSMusicBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0E92F1D0525B50042B71D /* SSMusicBar.swift */; };
 		16D0E9351D0525B50042B71D /* UIViewController+SSMusicBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D0E9301D0525B50042B71D /* UIViewController+SSMusicBar.swift */; };
-		16D0E9371D0528080042B71D /* MarqueeLabelSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D0E9361D0528080042B71D /* MarqueeLabelSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		16675AD51D54904700F31FE9 /* MarqueeLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarqueeLayer.swift; sourceTree = "<group>"; };
+		16675AF61D5494E600F31FE9 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		16675AF81D5494E600F31FE9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		16675AFA1D5494E600F31FE9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		16675AFD1D5494E600F31FE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		16675AFF1D5494E600F31FE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16675B021D5494E600F31FE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		16675B041D5494E600F31FE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16D0E9021D05226D0042B71D /* SSGlobalMusicBar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SSGlobalMusicBar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16D0E9041D05226D0042B71D /* SSGlobalMusicBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSGlobalMusicBar.h; sourceTree = "<group>"; };
 		16D0E9061D05226D0042B71D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -25,25 +39,45 @@
 		16D0E92E1D0525B50042B71D /* SSDragInteractiveTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSDragInteractiveTransition.swift; path = Source/SSDragInteractiveTransition.swift; sourceTree = SOURCE_ROOT; };
 		16D0E92F1D0525B50042B71D /* SSMusicBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSMusicBar.swift; path = Source/SSMusicBar.swift; sourceTree = SOURCE_ROOT; };
 		16D0E9301D0525B50042B71D /* UIViewController+SSMusicBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+SSMusicBar.swift"; path = "Source/UIViewController+SSMusicBar.swift"; sourceTree = SOURCE_ROOT; };
-		16D0E9361D0528080042B71D /* MarqueeLabelSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabelSwift.framework; path = Carthage/Build/iOS/MarqueeLabelSwift.framework; sourceTree = "<group>"; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		16675AF31D5494E600F31FE9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16675B081D5494F400F31FE9 /* SSGlobalMusicBar.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16D0E8FE1D05226D0042B71D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16D0E9371D0528080042B71D /* MarqueeLabelSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16675AF71D5494E600F31FE9 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				16675AF81D5494E600F31FE9 /* AppDelegate.swift */,
+				16675AFA1D5494E600F31FE9 /* ViewController.swift */,
+				16675AFC1D5494E600F31FE9 /* Main.storyboard */,
+				16675AFF1D5494E600F31FE9 /* Assets.xcassets */,
+				16675B011D5494E600F31FE9 /* LaunchScreen.storyboard */,
+				16675B041D5494E600F31FE9 /* Info.plist */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
 		16D0E9031D05226D0042B71D /* SSGlobalMusicBar */ = {
 			isa = PBXGroup;
 			children = (
+				16675AD51D54904700F31FE9 /* MarqueeLayer.swift */,
 				16D0E92C1D0525B50042B71D /* SSAnimationDelegate.swift */,
 				16D0E92D1D0525B50042B71D /* SSDragAnimator.swift */,
 				16D0E92E1D0525B50042B71D /* SSDragInteractiveTransition.swift */,
@@ -58,9 +92,9 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
-				16D0E9361D0528080042B71D /* MarqueeLabelSwift.framework */,
 				607FACD21AFB9204008FA782 /* Example for SSGlobalMusicBar */,
 				16D0E9031D05226D0042B71D /* SSGlobalMusicBar */,
+				16675AF71D5494E600F31FE9 /* Demo */,
 				607FACD11AFB9204008FA782 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				16D0E9021D05226D0042B71D /* SSGlobalMusicBar.framework */,
+				16675AF61D5494E600F31FE9 /* Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +139,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		16675AF51D5494E600F31FE9 /* Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16675B051D5494E600F31FE9 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildPhases = (
+				16675AF21D5494E600F31FE9 /* Sources */,
+				16675AF31D5494E600F31FE9 /* Frameworks */,
+				16675AF41D5494E600F31FE9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Demo;
+			productName = Demo;
+			productReference = 16675AF61D5494E600F31FE9 /* Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		16D0E9011D05226D0042B71D /* SSGlobalMusicBar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16D0E9071D05226D0042B71D /* Build configuration list for PBXNativeTarget "SSGlobalMusicBar" */;
@@ -132,6 +184,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
+					16675AF51D5494E600F31FE9 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					16D0E9011D05226D0042B71D = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -151,11 +206,22 @@
 			projectRoot = "";
 			targets = (
 				16D0E9011D05226D0042B71D /* SSGlobalMusicBar */,
+				16675AF51D5494E600F31FE9 /* Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		16675AF41D5494E600F31FE9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16675B031D5494E600F31FE9 /* LaunchScreen.storyboard in Resources */,
+				16675B001D5494E600F31FE9 /* Assets.xcassets in Resources */,
+				16675AFE1D5494E600F31FE9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16D0E9001D05226D0042B71D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -166,6 +232,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		16675AF21D5494E600F31FE9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16675AFB1D5494E600F31FE9 /* ViewController.swift in Sources */,
+				16675AF91D5494E600F31FE9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		16D0E8FD1D05226D0042B71D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -174,13 +249,62 @@
 				16D0E9331D0525B50042B71D /* SSDragInteractiveTransition.swift in Sources */,
 				16D0E9351D0525B50042B71D /* UIViewController+SSMusicBar.swift in Sources */,
 				16D0E9311D0525B50042B71D /* SSAnimationDelegate.swift in Sources */,
+				16675AD61D54904700F31FE9 /* MarqueeLayer.swift in Sources */,
 				16D0E9341D0525B50042B71D /* SSMusicBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		16675AFC1D5494E600F31FE9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16675AFD1D5494E600F31FE9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		16675B011D5494E600F31FE9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				16675B021D5494E600F31FE9 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		16675B061D5494E600F31FE9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.SelfStudio.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		16675B071D5494E600F31FE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = Demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.SelfStudio.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		16D0E9081D05226D0042B71D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -322,6 +446,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		16675B051D5494E600F31FE9 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16675B061D5494E600F31FE9 /* Debug */,
+				16675B071D5494E600F31FE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		16D0E9071D05226D0042B71D /* Build configuration list for PBXNativeTarget "SSGlobalMusicBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
