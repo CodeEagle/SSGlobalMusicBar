@@ -86,6 +86,9 @@ extension SSMusicBar {
 		_titleView.translatesAutoresizingMaskIntoConstraints = false
 		leftButton.translatesAutoresizingMaskIntoConstraints = false
 		rightButton.translatesAutoresizingMaskIntoConstraints = false
+//		_titleView.backgroundColor = UIColor.greenColor()
+//		_titleLabel.backgroundColor = UIColor.orangeColor().CGColor
+//		_subtitleLabel.backgroundColor = UIColor.orangeColor().CGColor
 //		let height = (bounds.height - 4) / 2
 //		_titleView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[_titleLabel]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["_titleLabel": _titleLabel]))
 //
@@ -166,7 +169,7 @@ extension SSMusicBar {
 		dispatch_async(dispatch_get_main_queue(), { () -> Void in
 			guard let value = self.title else { return }
 			let attr = self.defaultAttributed(true)
-			self._titleLabel.update(NSAttributedString(string: value, attributes: attr), y: 2)
+			self._titleLabel.update(NSAttributedString(string: value, attributes: attr), y: 4)
 		})
 	}
 
@@ -174,7 +177,7 @@ extension SSMusicBar {
 		dispatch_async(dispatch_get_main_queue(), { () -> Void in
 			guard let value = self.subtitle else { return }
 			let attr = self.defaultAttributed(false)
-			self._subtitleLabel.update(NSAttributedString(string: value, attributes: attr), y: (self.bounds.height - 4) / 2)
+			self._subtitleLabel.update(NSAttributedString(string: value, attributes: attr), y: (SSMusicBar.barHeight) / 2 + 2)
 		})
 	}
 }

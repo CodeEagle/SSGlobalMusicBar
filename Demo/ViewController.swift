@@ -32,8 +32,8 @@ extension ViewController: SSMusicBarShowableProtocol {
 	var playerPlayingState: PlayerStatus { return .Playing }
 	var playerPlayingId: String? { return "1" }
 	var playerPlayingIndex: Int { return 0 }
-	var playerCurrentSongName: String { return "test" }
-	var playerCurrentSongArtistName: String { return "long text test..................................asdfasdfasdfal;ks;djfakl;sdjfpoaisudfaoijsdpfoia..long long long " }
+	var playerCurrentSongName: String { return "faceline" }
+	var playerCurrentSongArtistName: String { return "胖虎乐队" }
 	var playerCurrentSongProgress: Float { return 0.5 }
 	var playerControlPlayImage: UIImage? { return nil }
 	var playerControlPauseImage: UIImage? { return nil }

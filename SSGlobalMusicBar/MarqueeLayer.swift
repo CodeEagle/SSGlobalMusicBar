@@ -9,6 +9,8 @@
 import UIKit
 
 public final class MarqueeLayer: CALayer {
+
+	private var animate = false
 	var contentInset = UIEdgeInsetsZero
 	private let text = CATextLayer()
 	private var maxWidth: CGFloat = 0
@@ -33,8 +35,9 @@ public final class MarqueeLayer: CALayer {
 	}
 
 	func update(string: NSAttributedString, y: CGFloat) {
+		print("string:\(string)")
 		var rectValue = CGRectZero
-		let size = CGSizeMake(CGFloat.max, bounds.size.height + 20)
+		let size = CGSizeMake(9999, bounds.size.height + 20)
 		let value = string.boundingRectWithSize(size, options: .UsesFontLeading, context: nil)
 		var textRect = CGRectMake(
 			0,
@@ -66,9 +69,13 @@ public final class MarqueeLayer: CALayer {
 
 	private func marquee(from start: CGPoint, to end: CGPoint, max point: CGPoint) {
 		removeAllAnimations()
-		if end.x >= 0 { return }
-		if start == end { return }
+		if end.x >= 0 || start == end {
+			animate = false
+			return
+		}
+		animate = true
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
+			if self?.animate == false { return }
 			let speed: CGFloat = 10 // 10 point per second
 			let duration: NSTimeInterval = {
 				let xDuration = abs(end.x) / speed
