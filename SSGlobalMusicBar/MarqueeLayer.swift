@@ -35,7 +35,6 @@ public final class MarqueeLayer: CALayer {
 	}
 
 	func update(string: NSAttributedString, y: CGFloat) {
-		print("string:\(string)")
 		var rectValue = CGRectZero
 		let size = CGSizeMake(9999, bounds.size.height + 20)
 		let value = string.boundingRectWithSize(size, options: .UsesFontLeading, context: nil)
