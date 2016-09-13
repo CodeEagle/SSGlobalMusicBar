@@ -29,7 +29,7 @@ extension ViewController: SSMusicBarShowableProtocol {
 	var playerProgressChangeKey: String { return "b" }
 	var playerPlayingStateChangeKey: String { return "c" }
 	var playerPlayingInfoUpateKey: String { return "d" }
-	var playerPlayingState: PlayerStatus { return .Playing }
+	var playerPlayingState: PlayerStatus { return .playing }
 	var playerPlayingId: String? { return "1" }
 	var playerPlayingIndex: Int { return 0 }
 	var playerCurrentSongName: String { return "faceline" }
@@ -41,10 +41,10 @@ extension ViewController: SSMusicBarShowableProtocol {
 	var playerShowsInController: UIViewController { return self }
 	var playerDetailViewController: UIViewController {
 		let vc = UIViewController(nibName: nil, bundle: nil)
-		vc.view.backgroundColor = UIColor.whiteColor()
+		vc.view.backgroundColor = UIColor.white
 		return vc
 	}
-	func initConfigurationForMusicBar(bar: SSMusicBar) {
+	func initConfigurationForMusicBar(_ bar: SSMusicBar) {
 
 	}
 }

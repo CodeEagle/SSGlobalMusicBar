@@ -9,7 +9,7 @@
 import UIKit
 //MARK:- Constant
 public enum SSMusicBarConstant: CGFloat {
-	case MusicBarHeight = 40
+	case musicBarHeight = 40
 }
 //MARK:- MusicBarControlsEvent
 public enum MusicBarControlsEvent: String {
@@ -21,7 +21,7 @@ public enum MusicBarControlsEvent: String {
 //MARK:- MusicBarManager
 private final class MusicBarManager {
 
-	private(set) weak var target: SSMusicBarShowableProtocol?
+	fileprivate(set) weak var target: SSMusicBarShowableProtocol?
 
 	deinit { unregisterMonitor() }
 
@@ -34,18 +34,18 @@ private final class MusicBarManager {
 		didSet { canShowMusicBar ? setup() : unregisterMonitor() }
 	}
 
-	private(set) lazy var musicBar: SSMusicBar = SSMusicBar()
+	fileprivate(set) lazy var musicBar: SSMusicBar = SSMusicBar()
 
-	private(set) weak var tabBar: UITabBar?
-	private lazy var tabBarInSameView = false
+	fileprivate(set) weak var tabBar: UITabBar?
+	fileprivate lazy var tabBarInSameView = false
 
-	private var delegate: SSAnimationDelegate?
+	fileprivate var delegate: SSAnimationDelegate?
 
-	private var Notifier: NSNotificationCenter { return NSNotificationCenter.defaultCenter() }
+	fileprivate var Notifier: NotificationCenter { return NotificationCenter.default }
 
 	// MARK:- Private
 
-	private func unregisterMonitor() {
+	fileprivate func unregisterMonitor() {
 		musicBar.removeConstraints(musicBar.constraints)
 		var frame = musicBar.frame
 		frame.origin.y += frame.size.height
@@ -53,82 +53,82 @@ private final class MusicBarManager {
 		Notifier.removeObserver(self)
 	}
 
-	private func setup() {
+	fileprivate func setup() {
 		addObserver()
 		setupDelegate()
 	}
 
-	private func addObserver() {
+	fileprivate func addObserver() {
 		guard let requester = target else { return }
 
 		target?.initConfigurationForMusicBar(musicBar)
 
 		var ss_playing = false
 
-		if (requester.playerPlayingState == .Playing || requester.playerPlayingState == .Buffering) && requester.playerPlayingId != nil {
+		if (requester.playerPlayingState == .playing || requester.playerPlayingState == .buffering) && requester.playerPlayingId != nil {
 			showMusicBar()
 		}
 
 		defaultMusicBarInfo()
-		Notifier.addObserverForName(requester.playerIndexDidChangeKey, object: nil, queue: nil) { [weak self](_) -> Void in
-			if UIApplication.sharedApplication().applicationState == .Background { return }
+		Notifier.addObserver(forName: NSNotification.Name(rawValue: requester.playerIndexDidChangeKey), object: nil, queue: nil) { [weak self](_) -> Void in
+			if UIApplication.shared.applicationState == .background { return }
 			self?.defaultMusicBarInfo()
 		}
 
-		Notifier.addObserverForName(requester.playerPlayingInfoUpateKey, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self](_) in
-			if UIApplication.sharedApplication().applicationState == .Background { return }
+		Notifier.addObserver(forName: NSNotification.Name(rawValue: requester.playerPlayingInfoUpateKey), object: nil, queue: OperationQueue.main) { [weak self](_) in
+			if UIApplication.shared.applicationState == .background { return }
 			self?.defaultMusicBarInfo()
 		}
 
-		Notifier.addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self](_) in
+		Notifier.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main) { [weak self](_) in
 			self?.defaultMusicBarInfo()
 			// 修复被中断之后回来的状态不对的问题
-			let playing = self?.target?.playerPlayingState == .Playing
+			let playing = self?.target?.playerPlayingState == .playing
 			ss_playing = playing
-			dispatch_async(dispatch_get_main_queue(), { () -> Void in
+			DispatchQueue.main.async(execute: { () -> Void in
 				self?.resetMusicBarButtonForPlaying(playing)
 			})
 		}
 
-		Notifier.addObserverForName(requester.playerProgressChangeKey, object: nil, queue: nil) { [weak self](note) -> Void in
+		Notifier.addObserver(forName: NSNotification.Name(rawValue: requester.playerProgressChangeKey), object: nil, queue: nil) { [weak self](note) -> Void in
 			guard let sself = self else { return }
-			if UIApplication.sharedApplication().applicationState == .Background { return }
+			if UIApplication.shared.applicationState == .background { return }
 			sself.showMusicBar()
 			if let value = note.object as? Float {
 				let val = value.isNaN ? 0 : value
 				sself.updateMusicBar(progress: val)
 			}
-			let playing = sself.target?.playerPlayingState == .Playing
+			let playing = sself.target?.playerPlayingState == .playing
 			if ss_playing != playing {
 				ss_playing = playing
-				dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				DispatchQueue.main.async(execute: { () -> Void in
 					self?.resetMusicBarButtonForPlaying(playing)
 				})
 			}
 		}
 
-		Notifier.addObserverForName(requester.playerPlayingStateChangeKey, object: nil, queue: nil) { [weak self](note) -> Void in
+		Notifier.addObserver(forName: NSNotification.Name(rawValue: requester.playerPlayingStateChangeKey), object: nil, queue: nil) { [weak self](note) -> Void in
 			guard let sself = self else { return }
-			if UIApplication.sharedApplication().applicationState == .Background { return }
+			if UIApplication.shared.applicationState == .background { return }
 			if !sself.musicBar.visible { return }
 			if let playing = note.object as? Bool {
 				ss_playing = playing
-				dispatch_async(dispatch_get_main_queue(), { () -> Void in
+				DispatchQueue.main.async(execute: { () -> Void in
 					self?.resetMusicBarButtonForPlaying(playing)
 				})
 			}
 		}
 	}
 
-	private func setupDelegate() {
+	fileprivate func setupDelegate() {
 		if let requester = self.target {
 
 			if let tabBarController = target?.playerShowsInController as? UITabBarController {
 				tabBar = tabBarController.tabBar
 				tabBarInSameView = true
 			}
-			func loopParentVC(vc: UIViewController?) {
-				guard let parentVC = vc?.parentViewController else { return }
+			func loopParentVC(_ vc: UIViewController?) {
+				guard let parentVC = vc?.parent else { return }
 				if tabBar == nil {
 					if let tabBarController = parentVC as? UITabBarController {
 						tabBar = tabBarController.tabBar
@@ -140,66 +140,66 @@ private final class MusicBarManager {
 			loopParentVC(target?.playerShowsInController)
 			var y: CGFloat = 0
 			if let bar = tabBar {
-				y = CGRectGetHeight(bar.frame)
+				y = bar.frame.height
 			}
 			delegate = SSAnimationDelegate(target: target, drag: musicBar, initialY: y, tabBar: tabBar)
 		}
 	}
 
-	private func showMusicBar() {
+	fileprivate func showMusicBar() {
 		if !canShowMusicBar { return }
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self]() -> Void in
+		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) { [weak self]() -> Void in
 			self?.execute()
 		}
 	}
 
-	private func execute() {
+	fileprivate func execute() {
 		if musicBar.superview != nil { return }
 		guard let viewController = target?.playerShowsInController else { return }
 		let contentView: UIView? = viewController.view
 
-		let h = UIScreen.mainScreen().bounds.height
-		let w = UIScreen.mainScreen().bounds.width
+		let h = UIScreen.main.bounds.height
+		let w = UIScreen.main.bounds.width
 
-		musicBar.frame = CGRectMake(0, h, w, SSMusicBarConstant.MusicBarHeight.rawValue)
+		musicBar.frame = CGRect(x: 0, y: h, width: w, height: SSMusicBarConstant.musicBarHeight.rawValue)
 		if let bar = tabBar {
 			contentView?.insertSubview(musicBar, belowSubview: bar)
 		} else {
 			contentView?.addSubview(musicBar)
 		}
 		musicBar.translatesAutoresizingMaskIntoConstraints = false
-		contentView?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[musicBar]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar]))
-		let height = SSMusicBarConstant.MusicBarHeight.rawValue
+		contentView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[musicBar]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar]))
+		let height = SSMusicBarConstant.musicBarHeight.rawValue
 		if let bar = tabBar {
 			if tabBarInSameView {
-				let constraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[musicBar(\(height))]-0-[bar]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar, "bar": bar])
+				let constraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[musicBar(\(height))]-0-[bar]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar, "bar": bar])
 				contentView?.addConstraints(constraint)
 			} else {
-				let constraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[musicBar(\(height))]-\(bar.frame.size.height)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar])
+				let constraint = NSLayoutConstraint.constraints(withVisualFormat: "V:[musicBar(\(height))]-\(bar.frame.size.height)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar])
 				contentView?.addConstraints(constraint)
 			}
 		} else {
-			contentView?.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[musicBar(\(height))]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar]))
+			contentView?.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[musicBar(\(height))]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["musicBar": musicBar]))
 		}
 
-		UIView.animateWithDuration(0.2,
+		UIView.animate(withDuration: 0.2,
 			delay: 0,
 			usingSpringWithDamping: 0.8,
 			initialSpringVelocity: 10,
-			options: UIViewAnimationOptions.CurveEaseIn,
+			options: UIViewAnimationOptions.curveEaseIn,
 			animations: { contentView?.layoutIfNeeded() },
 			completion: nil)
 	}
 
-	private func defaultMusicBarInfo() {
+	fileprivate func defaultMusicBarInfo() {
 		let song = target?.playerCurrentSongName
 		let artist = target?.playerCurrentSongArtistName
 		let progress = target?.playerCurrentSongProgress
 		updateMusicBar((song, artist), progress: progress)
 	}
 
-	private func updateMusicBar(info: (songName: String?, artist: String?)? = nil, progress: Float?) {
-		dispatch_async(dispatch_get_main_queue(), { () -> Void in
+	fileprivate func updateMusicBar(_ info: (songName: String?, artist: String?)? = nil, progress: Float?) {
+		DispatchQueue.main.async(execute: { () -> Void in
 			if let value = info {
 				self.musicBar.title = value.songName ?? ""
 				self.musicBar.subtitle = value.artist ?? ""
@@ -211,46 +211,46 @@ private final class MusicBarManager {
 		})
 	}
 
-	private func setPopupItemButtons() {
+	fileprivate func setPopupItemButtons() {
 
-		musicBar.leftButton.addTarget(self, action: #selector(MusicBarManager.toggle(_:)), forControlEvents: .TouchUpInside)
+		musicBar.leftButton.addTarget(self, action: #selector(MusicBarManager.toggle(_:)), for: .touchUpInside)
 
-		musicBar.rightButton.addTarget(self, action: #selector(MusicBarManager.more), forControlEvents: .TouchUpInside)
+		musicBar.rightButton.addTarget(self, action: #selector(MusicBarManager.more), for: .touchUpInside)
 
-		dispatch_async(dispatch_get_main_queue(), { () -> Void in
-			self.musicBar.leftButton.setImage(self.target?.playerControlPauseImage, forState: .Selected)
-			self.musicBar.leftButton.setImage(self.target?.playerControlPlayImage, forState: .Normal)
-			self.musicBar.rightButton.setImage(self.target?.playerControlMoreImage, forState: .Normal)
+		DispatchQueue.main.async(execute: { () -> Void in
+			self.musicBar.leftButton.setImage(self.target?.playerControlPauseImage, for: .selected)
+			self.musicBar.leftButton.setImage(self.target?.playerControlPlayImage, for: UIControlState())
+			self.musicBar.rightButton.setImage(self.target?.playerControlMoreImage, for: UIControlState())
 		})
 	}
 
-	private func resetMusicBarButtonForPlaying(isPlaying: Bool = true) {
-		dispatch_async(dispatch_get_main_queue(), { () -> Void in
-			self.musicBar.leftButton.selected = isPlaying
+	fileprivate func resetMusicBarButtonForPlaying(_ isPlaying: Bool = true) {
+		DispatchQueue.main.async(execute: { () -> Void in
+			self.musicBar.leftButton.isSelected = isPlaying
 		})
 	}
 
-	@objc private func toggle(button: UIButton) {
+	@objc fileprivate func toggle(_ button: UIButton) {
 		var name = MusicBarControlsEvent.Play.rawValue
-		if button.selected {
+		if button.isSelected {
 			name = MusicBarControlsEvent.Pause.rawValue
 		}
-		Notifier.postNotificationName(name, object: nil)
-		button.selected = !button.selected
+		Notifier.post(name: Notification.Name(rawValue: name), object: nil)
+		button.isSelected = !button.isSelected
 	}
 
-	@objc private func more() {
-		Notifier.postNotificationName(MusicBarControlsEvent.More.rawValue, object: nil)
+	@objc fileprivate func more() {
+		Notifier.post(name: Notification.Name(rawValue: MusicBarControlsEvent.More.rawValue), object: nil)
 	}
 }
 //MARK:- PlayerStatus
 public enum PlayerStatus: UInt {
-	case Playing, Paused, Idle, Finished, Buffering, Error
+	case playing, paused, idle, finished, buffering, error
 }
 //MARK:- SSMusicDetailViewProtocol
 public protocol SSMusicDetailViewProtocol {
 	var controller: UIViewController { get }
-	var dimissDone: dispatch_block_t { get }
+	var dimissDone: ()->() { get }
 	init()
 }
 
@@ -272,13 +272,13 @@ public protocol SSMusicBarShowableProtocol: class {
 	var playerControlMoreImage: UIImage? { get }
 	var playerShowsInController: UIViewController { get }
 	var playerDetailViewController: UIViewController { get }
-	func initConfigurationForMusicBar(bar: SSMusicBar)
+	func initConfigurationForMusicBar(_ bar: SSMusicBar)
 }
 
 //MARK:- Extension SSMusicBarShowableProtocol
 public extension SSMusicBarShowableProtocol {
 
-	private var manager: MusicBarManager {
+	fileprivate var manager: MusicBarManager {
 		get {
 			let man = MusicBarManager(object: self)
 			if let value = objc_getAssociatedObject(self, &AssociatedKeys.MusicBarManager) as? MusicBarManager {

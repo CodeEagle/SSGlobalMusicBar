@@ -9,17 +9,17 @@
 import UIKit
 
 //MARK:- ModalAnimatedTransitioningType
-enum ModalAnimatedTransitioningType { case Present, Dismiss }
+enum ModalAnimatedTransitioningType { case present, dismiss }
 
 //MARK:- SSDragAnimator
 final class SSDragAnimator: NSObject {
 
-	private let AnimationDuration: NSTimeInterval = 0.4
+	fileprivate let AnimationDuration: TimeInterval = 0.4
 
-	private let _type: ModalAnimatedTransitioningType
-	private let _initialY: CGFloat
-	private weak var _commonView: SSMusicBar?
-	private weak var _tabBar: UITabBar?
+	fileprivate let _type: ModalAnimatedTransitioningType
+	fileprivate let _initialY: CGFloat
+	fileprivate weak var _commonView: SSMusicBar?
+	fileprivate weak var _tabBar: UITabBar?
 
 	init(type: ModalAnimatedTransitioningType, iitialY: CGFloat, commonView: SSMusicBar, tabBar: UITabBar?) {
 		_type = type
@@ -32,46 +32,46 @@ final class SSDragAnimator: NSObject {
 // MARK: - UIViewControllerAnimatedTransitioning
 extension SSDragAnimator: UIViewControllerAnimatedTransitioning {
 
-	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 		return AnimationDuration
 	}
 
-	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-		guard let to = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey),
-			from = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) else { return }
+	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+		guard let to = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to),
+			let from = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else { return }
 		switch _type {
-		case .Present: animatePresentingInContext(transitionContext, toVC: to, fromVC: from)
-		case .Dismiss: animateDismissingInContext(transitionContext, toVC: to, fromVC: from)
+		case .present: animatePresentingInContext(transitionContext, toVC: to, fromVC: from)
+		case .dismiss: animateDismissingInContext(transitionContext, toVC: to, fromVC: from)
 		}
 	}
 }
 //MARK:- private
 private extension SSDragAnimator {
 
-	func animatePresentingInContext(transitionContext: UIViewControllerContextTransitioning, toVC: UIViewController, fromVC: UIViewController) {
+	func animatePresentingInContext(_ transitionContext: UIViewControllerContextTransitioning, toVC: UIViewController, fromVC: UIViewController) {
 
-		let fromVCRect = transitionContext.initialFrameForViewController(fromVC)
+		let fromVCRect = transitionContext.initialFrame(for: fromVC)
 		var toVCRect = fromVCRect
 		toVCRect.origin.y = toVCRect.size.height - _initialY
 		toVC.view.frame = toVCRect
-		let container = transitionContext.containerView()
+		let container = transitionContext.containerView
 		let imageView = snapshotCommonView()
 		toVC.view?.addSubview(imageView)
-		container?.addSubview(fromVC.view)
-		container?.addSubview(toVC.view)
+		container.addSubview(fromVC.view)
+		container.addSubview(toVC.view)
 		let v = snapshotTabbar()
 		v?.alpha = 1
 		if let tabbar = v {
-			container?.addSubview(tabbar)
+			container.addSubview(tabbar)
 		}
-		UIView.animateWithDuration(AnimationDuration, animations: { () -> Void in
+		UIView.animate(withDuration: AnimationDuration, animations: { () -> Void in
 			toVC.view.frame = fromVCRect
 			imageView.alpha = 0.0
 			v?.alpha = 0
 			}, completion: { (finished: Bool) -> Void in
 			imageView.removeFromSuperview()
 			v?.removeFromSuperview()
-			if transitionContext.transitionWasCancelled() {
+			if transitionContext.transitionWasCancelled {
 				transitionContext.completeTransition(false)
 			} else {
 				transitionContext.completeTransition(true)
@@ -79,29 +79,29 @@ private extension SSDragAnimator {
 		})
 	}
 
-	func animateDismissingInContext(transitionContext: UIViewControllerContextTransitioning, toVC: UIViewController, fromVC: UIViewController) {
-		var fromVCRect: CGRect = transitionContext.initialFrameForViewController(fromVC)
+	func animateDismissingInContext(_ transitionContext: UIViewControllerContextTransitioning, toVC: UIViewController, fromVC: UIViewController) {
+		var fromVCRect: CGRect = transitionContext.initialFrame(for: fromVC)
 		fromVCRect.origin.y = fromVCRect.size.height - _initialY
 		let imageView = snapshotCommonView()
 		fromVC.view?.addSubview(imageView)
-		let container = transitionContext.containerView()
-		container?.addSubview(toVC.view)
-		container?.addSubview(fromVC.view)
+		let container = transitionContext.containerView
+		container.addSubview(toVC.view)
+		container.addSubview(fromVC.view)
 		imageView.alpha = 0.0
 		let v = snapshotTabbar()
 		v?.alpha = 0
 		if let tabbar = v {
-			container?.addSubview(tabbar)
+			container.addSubview(tabbar)
 		}
 
-		UIView.animateWithDuration(AnimationDuration, animations: { () -> Void in
+		UIView.animate(withDuration: AnimationDuration, animations: { () -> Void in
 			fromVC.view.frame = fromVCRect
 			imageView.alpha = 1
 			v?.alpha = 1
 			}, completion: { (finished: Bool) -> Void in
 			imageView.removeFromSuperview()
 			v?.removeFromSuperview()
-			if transitionContext.transitionWasCancelled() {
+			if transitionContext.transitionWasCancelled {
 				transitionContext.completeTransition(false)
 				toVC.view?.removeFromSuperview()
 			} else {
@@ -113,8 +113,8 @@ private extension SSDragAnimator {
 	func snapshotCommonView() -> UIView {
 		guard let value = _commonView else { return UIView() }
 		let h = value.frame.height
-		let imageView = UIImageView(frame: CGRectMake(0, -h, value.frame.width, h))
-		dispatch_async(dispatch_get_main_queue(), { () -> Void in
+		let imageView = UIImageView(frame: CGRect(x: 0, y: -h, width: value.frame.width, height: h))
+		DispatchQueue.main.async(execute: { () -> Void in
 			guard let image = self._commonView?.snapShot() else { return }
 			imageView.image = image
 		})
@@ -124,9 +124,9 @@ private extension SSDragAnimator {
 	func snapshotTabbar() -> UIView? {
 		guard let value = _tabBar else { return nil }
 		let h = value.frame.height
-		let y = UIScreen.mainScreen().bounds.height - h
-		let imageView = UIImageView(frame: CGRectMake(0, y, value.frame.width, h))
-		dispatch_async(dispatch_get_main_queue(), { () -> Void in
+		let y = UIScreen.main.bounds.height - h
+		let imageView = UIImageView(frame: CGRect(x: 0, y: y, width: value.frame.width, height: h))
+		DispatchQueue.main.async(execute: { () -> Void in
 			let image = value.snapShot()
 			imageView.image = image
 		})
@@ -137,10 +137,10 @@ private extension SSDragAnimator {
 extension UIView {
 
 	func snapShot() -> UIImage {
-		UIGraphicsBeginImageContextWithOptions(bounds.size, opaque, 0)
-		layer.renderInContext(UIGraphicsGetCurrentContext()!)
+		UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, 0)
+		layer.render(in: UIGraphicsGetCurrentContext()!)
 		let snap = UIGraphicsGetImageFromCurrentImageContext()
 		UIGraphicsEndImageContext()
-		return snap
+		return snap!
 	}
 }

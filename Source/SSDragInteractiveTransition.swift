@@ -11,17 +11,17 @@ import UIKit
 final class SSDragInteractiveTransition: UIPercentDrivenInteractiveTransition {
 
 	var configureToPresentControllerWhenNeeds: (() -> UIViewController?)?
-	var doneOrCancelClosure: dispatch_block_t?
+	var doneOrCancelClosure: (() -> ())?
 
 	lazy var transitioning = false
 
-	private weak var _toPresentController: UIViewController?
-	private weak var _viewController: UIViewController?
-	private weak var _musicBar: SSMusicBar?
-	private var _type: ModalAnimatedTransitioningType
+	fileprivate weak var _toPresentController: UIViewController?
+	fileprivate weak var _viewController: UIViewController?
+	fileprivate weak var _musicBar: SSMusicBar?
+	fileprivate var _type: ModalAnimatedTransitioningType
 
-	private lazy var _shouldDismiss = false
-	private lazy var _shouldComplete = false
+	fileprivate lazy var _shouldDismiss = false
+	fileprivate lazy var _shouldComplete = false
 
 	init(Drag view: UIView, type: ModalAnimatedTransitioningType, viewController: UIViewController?, musicBar: SSMusicBar?) {
 		_type = type
@@ -30,52 +30,52 @@ final class SSDragInteractiveTransition: UIPercentDrivenInteractiveTransition {
 		_musicBar = musicBar
 		let pan = UIPanGestureRecognizer(target: self, action: #selector(SSDragInteractiveTransition.onPan(_:)))
 		view.addGestureRecognizer(pan)
-		completionCurve = .EaseInOut
+		completionCurve = .easeInOut
 	}
 
-	@objc private func onPan(pan: UIPanGestureRecognizer) {
-		let translation: CGPoint = pan.translationInView(pan.view?.superview)
-		let velocity: CGPoint = pan.velocityInView(pan.view?.superview)
+	@objc fileprivate func onPan(_ pan: UIPanGestureRecognizer) {
+		let translation: CGPoint = pan.translation(in: pan.view?.superview)
+		let velocity: CGPoint = pan.velocity(in: pan.view?.superview)
 		switch pan.state {
-		case .Began:
+		case .began:
 			_musicBar?.visible = false
-			if _type == .Dismiss {
+			if _type == .dismiss {
 				_shouldDismiss = velocity.y > 0
 				if !_shouldDismiss { return }
-				completionCurve = .EaseOut
-				_viewController?.dismissViewControllerAnimated(true, completion: nil)
+				completionCurve = .easeOut
+				_viewController?.dismiss(animated: true, completion: nil)
 			} else {
 				if _toPresentController == nil {
 					_toPresentController = configureToPresentControllerWhenNeeds?()
 				}
 				guard let value = _toPresentController else { return }
-				completionCurve = .EaseIn
+				completionCurve = .easeIn
 				_viewController?.showDetailViewController(value, sender: nil)
 			}
-		case .Changed:
-			if !_shouldDismiss && _type == .Dismiss { return }
+		case .changed:
+			if !_shouldDismiss && _type == .dismiss { return }
 			transitioning = true
-			let screenHeight: CGFloat = UIScreen.mainScreen().bounds.size.height - 50.0
+			let screenHeight: CGFloat = UIScreen.main.bounds.size.height - 50.0
 			let DragAmount: CGFloat = _toPresentController == nil ? screenHeight : -screenHeight
 			let Threshold: CGFloat = 0.3
 			var percent: CGFloat = translation.y / DragAmount
 			percent = fmax(percent, 0.0)
 			percent = fmin(percent, 1.0)
-			updateInteractiveTransition(percent)
+			update(percent)
 			_shouldComplete = percent > Threshold
 
-		case .Cancelled, .Ended:
-			if !_shouldDismiss && _type == .Dismiss { return }
+		case .cancelled, .ended:
+			if !_shouldDismiss && _type == .dismiss { return }
 			completionSpeed = 1 - percentComplete
-			if pan.state == .Cancelled || !_shouldComplete {
-				cancelInteractiveTransition()
-				if _type == .Present {
+			if pan.state == .cancelled || !_shouldComplete {
+				cancel()
+				if _type == .present {
 					_musicBar?.visible = true
 					doneOrCancelClosure?()
 				}
 			} else {
-				finishInteractiveTransition()
-				if _type == .Dismiss {
+				finish()
+				if _type == .dismiss {
 					_musicBar?.visible = true
 					doneOrCancelClosure?()
 				}
@@ -87,8 +87,8 @@ final class SSDragInteractiveTransition: UIPercentDrivenInteractiveTransition {
 
 	func dismissDetail() {
 //		if _type == .Present { return }
-		_viewController?.dismissViewControllerAnimated(true, completion: nil)
-		updateInteractiveTransition(0.8)
-		finishInteractiveTransition()
+		_viewController?.dismiss(animated: true, completion: nil)
+		update(0.8)
+		finish()
 	}
 }

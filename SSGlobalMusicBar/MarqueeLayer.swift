@@ -10,39 +10,39 @@ import UIKit
 
 public final class MarqueeLayer: CALayer {
 
-	private var animate = false
-	var contentInset = UIEdgeInsetsZero
-	private let text = CATextLayer()
-	private var maxWidth: CGFloat = 0
-	override init(layer: AnyObject) { super.init(layer: layer) }
+	fileprivate var animate = false
+	var contentInset = UIEdgeInsets.zero
+	fileprivate let text = CATextLayer()
+	fileprivate var maxWidth: CGFloat = 0
+	override init(layer: Any) { super.init(layer: layer) }
 	required public init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
-	private var gMask = CAGradientLayer()
+	fileprivate var gMask = CAGradientLayer()
 	init(max width: CGFloat) {
 		super.init()
 		maxWidth = width
-		text.anchorPoint = CGPointZero
+		text.anchorPoint = CGPoint.zero
 		masksToBounds = true
-		contentsScale = UIScreen.mainScreen().scale
+		contentsScale = UIScreen.main.scale
 		text.contentsScale = contentsScale
 		contentInset = UIEdgeInsetsMake(0, 4, 0, 4)
 
-		gMask.colors = [UIColor.clearColor().CGColor, UIColor.whiteColor().CGColor, UIColor.whiteColor().CGColor, UIColor.clearColor().CGColor]
+		gMask.colors = [UIColor.clear.cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor]
 		gMask.locations = [0, 0.05, 0.95, 1]
-		gMask.anchorPoint = CGPointZero
-		gMask.startPoint = CGPointMake(0, 0.5)
-		gMask.endPoint = CGPointMake(1, 0.5)
+		gMask.anchorPoint = CGPoint.zero
+		gMask.startPoint = CGPoint(x: 0, y: 0.5)
+		gMask.endPoint = CGPoint(x: 1, y: 0.5)
 		addSublayer(text)
 	}
 
-	func update(string: NSAttributedString, y: CGFloat) {
-		var rectValue = CGRectZero
-		let size = CGSizeMake(9999, bounds.size.height + 20)
-		let value = string.boundingRectWithSize(size, options: .UsesFontLeading, context: nil)
-		var textRect = CGRectMake(
-			0,
-			contentInset.top,
-			value.width,
-			contentInset.top + value.height + contentInset.bottom)
+	func update(_ string: NSAttributedString, y: CGFloat) {
+		var rectValue = CGRect.zero
+		let size = CGSize(width: 9999, height: bounds.size.height + 20)
+		let value = string.boundingRect(with: size, options: .usesFontLeading, context: nil)
+		var textRect = CGRect(
+			x: 0,
+			y: contentInset.top,
+			width: value.width,
+			height: contentInset.top + value.height + contentInset.bottom)
 		if maxWidth > value.width {
 			rectValue = textRect
 			mask = nil
@@ -54,42 +54,42 @@ public final class MarqueeLayer: CALayer {
 			rectValue.size.width = maxWidth
 		}
 		if let sp = superlayer {
-			rectValue = CGRectMake((sp.bounds.width - rectValue.width) / 2, y, rectValue.width, rectValue.height)
+			rectValue = CGRect(x: (sp.bounds.width - rectValue.width) / 2, y: y, width: rectValue.width, height: rectValue.height)
 		}
 		text.frame = textRect
 		frame = rectValue
 		text.string = string
 		mask?.frame = bounds
-		let start = CGPointMake(contentInset.left, 0)
-		let end = CGPointMake(frame.width - CGRectGetMaxX(textRect), 0)
-		let max = CGPointMake(maxWidth, CGRectGetHeight(rectValue))
+		let start = CGPoint(x: contentInset.left, y: 0)
+		let end = CGPoint(x: frame.width - textRect.maxX, y: 0)
+		let max = CGPoint(x: maxWidth, y: rectValue.height)
 		marquee(from: start, to: end, max: max)
 	}
 
-	private func marquee(from start: CGPoint, to end: CGPoint, max point: CGPoint) {
+	fileprivate func marquee(from start: CGPoint, to end: CGPoint, max point: CGPoint) {
 		removeAllAnimations()
 		if end.x >= 0 || start == end {
 			animate = false
 			return
 		}
 		animate = true
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
+		DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) { [weak self] in
 			if self?.animate == false { return }
 			let speed: CGFloat = 10 // 10 point per second
-			let duration: NSTimeInterval = {
+			let duration: TimeInterval = {
 				let xDuration = abs(end.x) / speed
 				let yDuration = abs(end.y) / speed
-				return NSTimeInterval(max(xDuration, yDuration))
+				return TimeInterval(max(xDuration, yDuration))
 			}()
 			let anime = CABasicAnimation(keyPath: "position")
 			anime.duration = duration
-			anime.toValue = NSValue(CGPoint: end)
-			anime.fromValue = NSValue(CGPoint: start)
+			anime.toValue = NSValue(cgPoint: end)
+			anime.fromValue = NSValue(cgPoint: start)
 			anime.repeatCount = 999
 			anime.autoreverses = true
-			anime.removedOnCompletion = false
+			anime.isRemovedOnCompletion = false
 			anime.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-			self?.text.addAnimation(anime, forKey: "position")
+			self?.text.add(anime, forKey: "position")
 		}
 	}
 }
